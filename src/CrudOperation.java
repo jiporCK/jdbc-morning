@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CrudOperation {
@@ -8,6 +10,7 @@ public class CrudOperation {
     private static final String PASSWORD = "adminpw";
 
     private static final Scanner scanner = new Scanner(System.in);
+    public static List<User> userList = new ArrayList<>();
 
     public void createUser() throws SQLException {
         Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -46,6 +49,10 @@ public class CrudOperation {
         System.out.print("Enter user id to find: ");
         int id = Integer.parseInt(scanner.nextLine());
 
+        if (!existById(id)) {
+            System.out.println("User does not exist!");
+        }
+
         String sql = """
                select * from users
                where id = ?
@@ -62,13 +69,46 @@ public class CrudOperation {
         }
     }
 
+    public static boolean existById(int id) throws SQLException {
+        Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+        String sql = """
+                select 1 from users where id = ?
+                """;
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        return rs.next();
+    }
+
     public static void main(String[] args) {
         CrudOperation operation = new CrudOperation();
-        try {
-//            operation.createUser();
-            operation.readUserById();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+
+        while (true) {
+            System.out.println("""
+                    1. Add user
+                    2. Read by id
+                    3. Update by id
+                    4. Delete by id
+                    5. Read all
+                    0. Exit program""");
+            System.out.print("Enter an option: ");
+            int op = Integer.parseInt(scanner.nextLine());
+
+            if (op == 0) break;
+
+            try {
+                switch (op) {
+                    case 1 -> operation.createUser();
+                    case 2 -> operation.readUserById();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
         }
+
     }
 }
