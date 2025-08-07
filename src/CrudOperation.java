@@ -69,6 +69,38 @@ public class CrudOperation {
         }
     }
 
+    public void updateUserById() throws SQLException {
+        Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+        System.out.print("Enter id to update: ");
+        int id = Integer.parseInt(scanner.nextLine());
+
+        if (!existById(id)) {
+            System.out.println("User not found");
+        }
+        System.out.print("Enter new name: ");
+        String newName = scanner.nextLine();
+        System.out.print("Enter new age: ");
+        int newAge = Integer.parseInt(scanner.nextLine());
+
+        String sql = """
+                update users
+                set name = ?, age = ?
+                where id = ?
+                """;
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, newName);
+        ps.setInt(2, newAge);
+        ps.setInt(3, id);
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            System.out.println("Updated successful");
+        } else {
+            System.out.println("Failed to update");
+        }
+    }
+
     public static boolean existById(int id) throws SQLException {
         Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
@@ -103,6 +135,8 @@ public class CrudOperation {
                 switch (op) {
                     case 1 -> operation.createUser();
                     case 2 -> operation.readUserById();
+                    case 3 -> operation.updateUserById();
+                    default -> System.out.println("Invalid");
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
