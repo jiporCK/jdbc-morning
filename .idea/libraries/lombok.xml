@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lombok">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Documents/istad/java/libraries/lombok.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/istad/java/libraries/postgresql-42.7.7.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/istad/java/libraries/text-table-formatter-1.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
