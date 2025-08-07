@@ -49,8 +49,9 @@ public class CrudOperation {
         System.out.print("Enter user id to find: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        if (!existById(id)) {
+        if (existById(id)) {
             System.out.println("User does not exist!");
+            return;
         }
 
         String sql = """
@@ -75,8 +76,9 @@ public class CrudOperation {
         System.out.print("Enter id to update: ");
         int id = Integer.parseInt(scanner.nextLine());
 
-        if (!existById(id)) {
+        if (existById(id)) {
             System.out.println("User not found");
+            return;
         }
         System.out.print("Enter new name: ");
         String newName = scanner.nextLine();
@@ -112,7 +114,7 @@ public class CrudOperation {
 
         ResultSet rs = ps.executeQuery();
 
-        return rs.next();
+        return !rs.next();
     }
 
     public static void main(String[] args) {
